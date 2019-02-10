@@ -6,6 +6,7 @@ import time
 import urllib, json
 from db import DBHelper
 import random
+from decimal import *
 
 def print_exception():
     exc_type, exc_obj, tb = sys.exc_info()
@@ -19,20 +20,21 @@ def print_exception():
 
 
 db = DBHelper()
-# db.setup()
+db.setup()
 def scrape(skip_plus = False, nb_pages=5):
     # current_url = 'https://www.airbnb.ca/s/Montreal--QC/homes?refinement_paths%5B%5D=%2Fhomes&adults=0&children=0&infants=0&guests=0&query=Montreal%2C%20QC&allow_override%5B%5D=&s_tag=G6_yvvwl'
     # current_url = 'https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=true&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=d324adc9-de58-48ad-8ec5-1e1f524f56c5&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&map_toggle=true&allow_override%5B%5D=&zoom=9&search_by_map=true&sw_lat=45.13634436876523&sw_lng=-74.46736584130811&ne_lat=45.97280593149832&ne_lng=-72.79542759863322&s_tag=9-SzSNcx&section_offset=7&items_offset=54&last_search_session_id=1d156103-5eba-4851-9788-568be4ad340c&federated_search_session_id=a94d5dd5-6d93-4421-ae87-694a5c493ac0&screen_size=large&query=Montreal%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA'
     try:
 
         # s = ParseMainXML(current_url, n)
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0'}
+        # headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0'}
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'}
 #Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36
         # cookie = {'bev': '1549292626_QUXDAXXxrfR7UlTi', 'affiliate' : 43720035, 'campaign': '.pi0.pk24883996964_97449571964_c_40203460644', 'affiliate_referral_at': 1549292626, 'last_aacb': '%7B%22af%22%3A%2243720035%22%2C%22c%22%3A%22.pi0.pk24883996964_97449571964_c_40203460644%22%2C%22timestamp%22%3A1549292626%2C%22gclid%22%3A%22EAIaIQobChMI6qSv4qyi4AIVRECGCh107w0MEAAYASAAEgLfavD_BwE%22%7D', 'jitney_client_session_id': 'c17e446c-7b1c-4bcc-bbe5-27ca1667465f', 'jitney_client_session_created_at': 1549417453, 'jitney_client_session_updated_at': 1549417685,
         #           '_user_attributes': '%7B%22curr%22%3A%22CAD%22%2C%22guest_exchange%22%3A1.31216%2C%22device_profiling_session_id%22%3A%221549292626--40263f7ed56c9225d35aa86d%22%2C%22giftcard_profiling_session_id%22%3A%221549417453--947fee2be81a04ef14e7ebfc%22%2C%22reservation_profiling_session_id%22%3A%221549417453--78bcab84f8a01d69e3b10413%22%7D'}
         #           # 'f4b08f5ff': 'treatment', 'cereal_exp': 26; 183ebdbbf=control; e8de742fb=control; __ssid=51dc471a63749533943a9786d29be46; 66bf01231=treatment; hyperloop_explore_exp_v2=5; cbkp=4; _gcl_au=1.1.404000349.1549292652; _ga=GA1.2.745079372.1549292653; _gid=GA1.2.1519692101.1549292653; a46dc25ab=short_upsell; 016951b48=control; e34ba1aae=control; sdid=; _csrf_token=V4%24.airbnb.ca%2478uBK57gIcQ%247KG43E7k7IUT2S3gyJDH-sT3oKzq1aSnXLjPyKlRbFA%3D; flags=0; AMP_TOKEN=%24NOT_FOUND; _gat=1; _gat_UA-2725447-1=1'
-        districts = ['Ahuntsic-Cartierville', 'Anjou', 'Cote-des-Neiges-Notre-Dame-de-Grace', 'Lachine', 'LaSalle', 'Le-Plateau-Mont-Royal',
+        coordinates = [{'district': 'Montreal', 'lng': '45.5576996', 'lat': '74.0104841'}, {'district': 'Ahuntsic-Cartierville', 'lng': '45.5446246', 'lat': '73.7613184'}, {'district': 'Anjou', 'lng': '45.6119922', 'lat': '73.6047729'}, {'district': 'Cote-des-Neiges-Notre-Dame-de-Grace', 'lng': '45.4831706', 'lat': '73.6701374'}, {'district': 'Lachine', 'lng': '45.4471755', 'lat': '73.7469568'}, {'district': 'LaSalle', 'lng': '45.433936', 'lat': '73.6697269'}, {'district': 'Le-Plateau-Mont-Royal', 'lng': '45.5232934', 'lat': '73.6208054'}, {'district': 'Le-Sud-Ouest', 'lng': '45.4679056', 'lat': '73.6510421'}, {'district': 'Ile-Bizard-Sainte-Genevieve', 'lng': '45.494336', 'lat': '73.9698186'}, {'district': 'Mercier-Hochelaga-Maisonneuve', 'lng': '45.5735859', 'lat': '73.5715484'}, {'district': 'Montreal-Nord', 'lng': '45.6049877', 'lat': '73.6655549'}, {'district': 'Outremont', 'lng': '45.5158739', 'lat': '73.6259516'}, {'district': 'Pierrefonds-Roxboro', 'lng': '45.4789116', 'lat': '73.9899208'}, {'district': 'Riviere-des-Prairies-Pointe-aux-Trembles', 'lng': '45.6586367', 'lat': '73.6169898'}, {'district': 'Rosemont-La-Petite-Patrie', 'lng': '45.5542481', 'lat': '73.6203401'}, {'district': 'Saint-Laurent', 'lng': '45.4969476', 'lat': '73.7824007'}, {'district': 'Saint-Leonard', 'lng': '45.5888511', 'lat': '73.6319504'}, {'district': 'Verdun', 'lng': '45.4532407', 'lat': '73.5947809'}, {'district': 'Ville-Marie', 'lng': '47.3313167', 'lat': '79.5334097'}, {'district': 'Villeray-Saint-Michel-Parc-Extension', 'lng': '45.5544322', 'lat': '73.6524817'}]
+        districts = ['Montreal', 'Ahuntsic-Cartierville', 'Anjou', 'Cote-des-Neiges-Notre-Dame-de-Grace', 'Lachine', 'LaSalle', 'Le-Plateau-Mont-Royal',
                     'Le-Sud-Ouest', "Ile-Bizard-Sainte-Genevieve", 'Mercier-Hochelaga-Maisonneuve', 'Montreal-Nord', 'Outremont', 'Pierrefonds-Roxboro',
                     'Riviere-des-Prairies-Pointe-aux-Trembles', 'Rosemont-La-Petite-Patrie', 'Saint-Laurent', 'Saint-Leonard', 'Verdun', 'Ville-Marie',
                     'Villeray-Saint-Michel-Parc-Extension']
@@ -40,53 +42,91 @@ def scrape(skip_plus = False, nb_pages=5):
         #
 #GET /api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=false&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=cfefbe5c-ccbd-46c9-9ed2-8bbb2a8d8c89&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=1&children=0&infants=0&guests=6&place_id=ChIJDbdkHFQayUwR7-8fITgxTmU&screen_size=large&query=Montréal-Nord%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA HTTP/1.1
         # print(str(len(districts)))
-        for district in districts:
-            print(f"######################################################################## DISTRICT: {district}  ########################################################################")
-            # print(str(district))
-            # https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=false&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=false&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=0ec30567-e89f-42a3-9114-1b0025986647&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=4&children=0&infants=0&guests=0&map_toggle=true&allow_override%5B%5D=&ib=true&zoom=14&search_by_map=true&s_tag=L4pZXxGZ&screen_size=medium&query=Downtown%2C%20Montreal%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA
-            for page in range(0, nb_pages):
-                try:
-                    print(f"************************* PAGE # {page}  *************************")
-                    if page == 0:
-                        current_url = f'https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=false&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=cfefbe5c-ccbd-46c9-9ed2-8bbb2a8d8c89&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=1&children=0&infants=0&guests=6&place_id=ChIJDbdkHFQayUwR7-8fITgxTmU&screen_size=large&query={str(district)}%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA'
-                    else:
+        for rep in range (0, 5):
+            for district in districts:
+                current_lng = 0
+                current_lat = 0
+                for coord in coordinates:
+                    if coord['district'] == district:
+                        current_lng = Decimal(coord['lng'])
+                        current_lat = Decimal(coord['lat'])
+                print(f"NEW LNG|LAT: {current_lng}:{current_lat}")
+                print(f"######################################################################## DISTRICT: {district}  ########################################################################")
+                # print(str(district))
+                # https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=false&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=false&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=0ec30567-e89f-42a3-9114-1b0025986647&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=4&children=0&infants=0&guests=0&map_toggle=true&allow_override%5B%5D=&ib=true&zoom=14&search_by_map=true&s_tag=L4pZXxGZ&screen_size=medium&query=Downtown%2C%20Montreal%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA
+                for page in range(0, nb_pages):
+                    try:
+                        print(f"************************* PAGE # {page}  *************************")
+                        # if page == 0:
+                        #     current_url = f'https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=false&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=cfefbe5c-ccbd-46c9-9ed2-8bbb2a8d8c89&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=1&children=0&infants=0&guests=6&place_id=ChIJDbdkHFQayUwR7-8fITgxTmU&screen_size=large&query={str(district)}%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA'
+                        # else:
+                        #     item_offset = page * 18
+                        #     current_url = f'https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=true&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=c17e446c-7b1c-4bcc-bbe5-27ca1667465f&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=1&children=0&infants=0&guests=1&map_toggle=true&allow_override%5B%5D=&zoom=13&search_by_map=true&s_tag=ZiZuTulV&section_offset=7&items_offset={item_offset}&last_search_session_id=7b33aef3-0fd9-4cbc-a73a-454d4ac8e66b&federated_search_session_id=0dc88c66-5572-40f9-9e9b-ac0e99c3f0da&screen_size=large&query={str(district)}%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA'
                         item_offset = page * 18
-                        current_url = f'https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=true&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=c17e446c-7b1c-4bcc-bbe5-27ca1667465f&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=1&children=0&infants=0&guests=1&map_toggle=true&allow_override%5B%5D=&zoom=13&search_by_map=true&s_tag=ZiZuTulV&section_offset=7&items_offset={item_offset}&last_search_session_id=7b33aef3-0fd9-4cbc-a73a-454d4ac8e66b&federated_search_session_id=0dc88c66-5572-40f9-9e9b-ac0e99c3f0da&screen_size=large&query={str(district)}%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA'
-                    print(f"current URL {current_url}")
-                    req = Request(url=current_url, headers=headers)
-                    # print(f"ENCODING: {req.encoding}")
-                    # req.encoding = 'UTF-8'
-                    data = urlopen(req).read()
-                    # print("Data: " + str(data))
-                    curr_data = json.loads(data)
-                    # print(f"Data: {curr_data}")
+                        current_url = f"https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&timezone_offset=-300&metadata_only=false&is_standard_search=true&tab_id=home_tab&items_offset={item_offset}&refinement_paths%5B%5D=%2Fhomes&adults=0&children=0&infants=0&guests=0&ib=true&s_tag=LtRWXMWS&screen_size=large&query={district}%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA"
+                        # current_url = f"https://www.airbnb.ca/s/{district}--QC/homes?refinement_paths%5B%5D=%2Fhomes&adults=4&children=0&infants=0&guests=0&query={district}%2C%20QC&ib=true&map_toggle=true&allow_override%5B%5D=&zoom=10&search_by_map=true&section_offset=7&items_offset={item_offset}"
+                        # current_url = f"https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&timezone_offset=-300&metadata_only=false&is_standard_search=true&tab_id=home_tab&items_offset={item_offset}&refinement_paths%5B%5D=%2Fhomes&adults=4&children=0&infants=0&guests=0&ib=true&map_toggle=true&allow_override%5B%5D=&zoom=10&search_by_map=true&section_offset=7&items_offset={item_offset}&screen_size=large&query={district}%2C%20QC&_intents=p1&currency=CAD&locale=en-CA"
+                        map_zoom = 2 + rep*2
+                        current_url = f"https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&is_guided_search=true&is_new_cards_experiment=true&luxury_pre_launch=true&query_understanding_enabled=true&show_groupings=true&supports_for_you_v3=true&timezone_offset=-300&client_session_id=f0acdb7c-295a-443e-bea6-c88d8b86ca1a&metadata_only=false&is_standard_search=true&refinement_paths%5B%5D=%2Fhomes&selected_tab_id=home_tab&adults=4&children=0&infants=0&guests=0&ib=true&map_toggle=true&zoom={map_zoom}&search_by_map=true&sw_lat={current_lat}&sw_lng={current_lng}&ne_lat={current_lat + Decimal(random.randint(-10,10)/10)}&ne_lng={current_lng + Decimal(random.randint(2,3) + random.randint(0,100)/100)}&allow_override%5B%5D=&s_tag=Yy8g-Vvk&section_offset=7&items_offset={item_offset}&screen_size=large&query={district}%2C%20Montreal%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA"
+                        # ne_lng = 0
+                        # ne_lat = 0
+                        # sw_lng = 0
+                        # sw_lat = 0
+                        # # sw_lat = 45.514326658125974 & sw_lng = -73.6530233050106 & ne_lat = 45.5319553763259 & ne_lng = -73.5712160548527
+                        # current_url = f"https://www.airbnb.ca/api/v2/explore_tabs?version=1.4.5&satori_version=1.1.0&_format=for_explore_search_web&experiences_per_grid=20&items_per_grid=18&guidebooks_per_grid=20&auto_ib=true&fetch_filters=true&has_zero_guest_treatment=true&timezone_offset=-300&metadata_only=false&is_standard_search=true&tab_id=home_tab&items_offset=0&refinement_paths%5B%5D=%2Fhomes&adults=0&children=0&infants=0&guests=0&ib=true&s_tag=LtRWXMWS&search_by_map=true&sw_lat=45.514326658125974&sw_lng=-73.6530233050106&ne_lat=45.5319553763259&ne_lng=-73.5712160548527&screen_size=large&query=Outremont%2C%20Montreal%2C%20QC&currency=CAD&locale=en-CA&screen_size=large&query=Montreal%2C%20QC&_intents=p1&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&currency=CAD&locale=en-CA"
+                        print(f"current URL {current_url}")
+                        req = Request(url=current_url, headers=headers)
+                        # print(f"ENCODING: {req.encoding}")
+                        # req.encoding = 'UTF-8'
+                        data = urlopen(req).read()
+                        # print("Data: " + str(data))
+                        curr_data = json.loads(data)
+                        # print(f"Data: {curr_data}")
 
-                    i = 0
-                    for k in range(0, len(curr_data['explore_tabs'][0]['sections'])):
+                        i = 0
+                        should_break = False
+                        print(f"Section len: {len(curr_data['explore_tabs'][0]['sections'])}")
+                        print(f"Section: {curr_data['explore_tabs'][0]['sections']}")
+                        # if len(curr_data['explore_tabs'][0]['sections'])==0:
+                        #     break
+                        for k in range(0, len(curr_data['explore_tabs'][0]['sections'])):
+                            try:
+                                if 'listings' in curr_data['explore_tabs'][0]['sections'][k]:
+                                    if len(curr_data['explore_tabs'][0]['sections'][k]['listings']) > 0:
+                                        while (i < len(curr_data['explore_tabs'][0]['sections'][k]['listings'])):
+                                            # for item in curr_data['explore_tabs'][0]['sections'][1]['listings']:
+                                            item = curr_data['explore_tabs'][0]['sections'][k]['listings'][i]
+                                            if skip_plus:
+                                                if 'kicker_badge' in item['listing']['kicker_content']:
+                                                    print('Skipped Plus listing')
+                                                    i += 1
+                                                    continue
+                                            # print(f"https://airbnb.ca/rooms/{item['listing']['id']}")
+                                            # print(f"price {i} : ${item['pricing_quote']['rate']['amount']}")
+                                            try:
+                                                save_item(item, page, district)
+                                                print("Saved new item")
+                                            except:
+                                                print_exception()
 
-                        try:
-                            if len(curr_data['explore_tabs'][0]['sections'][k]['listings']) > 0:
-                                while (i < len(curr_data['explore_tabs'][0]['sections'][k]['listings'])):
-                                    # for item in curr_data['explore_tabs'][0]['sections'][1]['listings']:
-                                    item = curr_data['explore_tabs'][0]['sections'][k]['listings'][i]
-                                    if skip_plus:
-                                        if 'kicker_badge' in item['listing']['kicker_content']:
-                                            print('Skipped Plus listing')
                                             i += 1
-                                            continue
-                                    # print(f"https://airbnb.ca/rooms/{item['listing']['id']}")
-                                    # print(f"price {i} : ${item['pricing_quote']['rate']['amount']}")
-                                    save_item(item, page, district)
-                                    print("Saved new item")
-                                    i += 1
-                                # time.sleep(random.randint(13,20))
-
-                        except:
-                            print_exception()
-                except:
-                    print_exception()
-                # time.sleep(6)
-                time.sleep(random.randint(10, 15))
+                                        # time.sleep(random.randint(13,20))
+                                    else:
+                                        if k>0:
+                                            should_break = True
+                                            break
+                            except:
+                                # if k>0:
+                                #     should_break = True
+                                print_exception()
+                                # break
+                        if should_break:
+                            break
+                    except:
+                        print_exception()
+                    # time.sleep(6)
+                    time.sleep(random.randint(10, 15))
+            time.sleep(20)
     except:
         print_exception()
 
@@ -95,7 +135,7 @@ def save_item(item, page, district):
     #region try Block
     try:
         room_id = item['listing']['id']
-        print(f"room id: {room_id}")
+        # print(f"room id: {room_id}")
     except:
         print("cant get room_id")
         room_id = None
@@ -233,6 +273,12 @@ def save_item(item, page, district):
         enabled = item['verified']['enabled']
     except:
         enabled = None
+
+    try:
+        amenity_ids = item['listing']['amenity_ids']
+        amenity_ids.sort()
+    except:
+        amenity_ids = None
     # page
     #endregion
     item_data = {
@@ -275,12 +321,12 @@ def save_item(item, page, district):
         'enabled': enabled,
     # page
         'page': page,
-        'district': district
-
+        'district': district,
+        'amenity_ids': amenity_ids
     }
 
     db.insert_item(item_data)
-    db.insert_amenities(item['listing']['amenity_ids'], roomID=item['listing']['id'])
+    # db.insert_amenities(item['listing']['amenity_ids'], roomID=item['listing']['id'])
 
 
 def test():
@@ -297,7 +343,7 @@ def test():
     #     print(data)
 
 
-scrape(skip_plus=False, nb_pages=5)
+scrape(skip_plus=False, nb_pages=20)
 
 # db.setup()
 # test()
